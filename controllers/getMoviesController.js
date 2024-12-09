@@ -3,7 +3,7 @@ const nodecron = require("node-cron")
 const VueModel = require("../models/getVueMovies")
 const { spawn } = require("child_process")
 
-nodecron.schedule("0 0 0 * * *", () => {
+nodecron.schedule("0 */4 * * * ", () => {
 
     async function getVueMovies() {
 

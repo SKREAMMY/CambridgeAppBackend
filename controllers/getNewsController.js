@@ -1,6 +1,8 @@
 const { spawn } = require("child_process");
 const fs = require("fs");
 const cronjob = require('node-cron')
+const parseString = require("xml2js").parseString;
+const fetch = require("node-fetch");
 
 // const sys = require('sys')
 
@@ -10,92 +12,91 @@ const GlobalWorldBBC = require("../models/globalWorld");
 const GlobalBusinessBBC = require("../models/globalBusiness");
 const GlobalHealthBBC = require("../models/globalHealth");
 const GlobalScienceBBC = require("../models/globalScience");
+const { log } = require("console");
 
 var response = []
+var http = require("https")
 
-cronjob.schedule("*/30 * * * *", () => {
-
-
-
-    async function getLocalBBCNewsFunction() {
+cronjob.schedule("*/59 * * * *", () => {
 
 
-        console.log("getting bcci news ");
-        const pythonscript = await spawn('python', ['./scripts/bbci.py']);
-
-        let chuncks = []
-        pythonscript.stdout.on("data", (data) => {
-            // console.log('Piping bcci news ...');
-            // console.log(`data for stdout bcc ${data}`);
-            chuncks.push(data);
-
-            async function readfile() {
-                global.bccidata = await fs.promises.readFile('./newsJSON/bcci.json', { encoding: 'utf-8' })
-                console.log("filecontent ", global.bccidata);
-                //  = filecontent;
-            }
-            // console.log("file read for bcci ", global.bccidata);
-
-
-            readfile();
-
-
-
-
-
-        })
-
-        pythonscript.stderr.on('data', (data) => {
-            console.log(` data for stderr + ${data}`);
-        })
-
-        pythonscript.on('close', () => {
-            console.log("closed bcci");
-        })
-
-        // console.log({ bccidata });
-
-    }
 
     async function getLocalNewsfunction() {
 
 
+        function convertXMLToJSON(url, callback) {
 
-        const python = await spawn('python', ['./scripts/cambridge-news.py']);
-
-        // sys.stdout.flush()
-        let chuncks = []
-        python.stdout.on('data', (data) => {
-
-            chuncks.push(data);
-        })
-
-
-
-        python.stderr.on('data', (data) => {
-            console.log(` data for stderr + ${data}`);
-        })
-
-        python.on('close', () => {
-            let data = Buffer.concat(chuncks);
-            let result = JSON.parse(data);
-            console.log("finally data is  ", result);
-            result["data"].map(async (d, index) => {
-
-
-                await LocalBBC.collection.drop();
-                await LocalBBC.create(d).then((response) => {
-                    console.log("created");
-                    console.log("added ", index, " ", d);
-
-                }).catch((err) => {
-                    console.log("unable to add the data");
+            var req = http.get(url, (res) => {
+                var xml = "";
+                res.on("data", function (chunk) {
+                    xml += chunk;
                 });
 
-            })
-            console.log("closed cbn");
-        })
+                res.on("err", function (err) {
+                    callback(err, null);
+                });
+                res.on('timeout', function (err) {
+                    callback(err, null);
+                });
+                res.on("end", function () {
+                    parseString(xml, (err, result) => {
+                        callback(null, result);
+                    })
+                })
 
+            })
+        }
+
+
+        async function appendNewstoDB(localnewsdata) {
+
+            await LocalBBC.collection.drop().then((res) => {
+                console.log("deleted first obj");
+
+            });
+
+            localnewsdata.map(async (news) => {
+
+                await LocalBBC.create(news).then((result) => {
+                    console.log("successfully added data ", news);
+
+                }).catch((error) => {
+                    console.log("error in adding to database", error);
+
+                });
+            })
+
+
+        }
+
+
+
+        const url = "https://www.cambridge-news.co.uk/?service=rss";
+        convertXMLToJSON(url, (err, data) => {
+            if (err) {
+                console.log("error ", err);
+
+            }
+            else {
+                var rawlocalnewsdata = data?.rss.channel[0].item;
+                console.log(rawlocalnewsdata[0].enclosure);
+
+                var localnewsdata = []
+                rawlocalnewsdata.map((data) => {
+                    var templocalnews = {};
+                    templocalnews["title"] = data.title[0];
+                    templocalnews["link"] = data.link[0];
+                    templocalnews["guid"] = data.guid[0];
+                    templocalnews["description"] = data.description[0];
+                    templocalnews["pubDate"] = data.pubDate[0];
+                    templocalnews["enclosure"] = data["enclosure"][0]["$"]["url"];
+                    templocalnews["mediaThumbnail"] = data["media:thumbnail"][0]["$"];
+                    localnewsdata.push(templocalnews);
+
+                })
+                appendNewstoDB(localnewsdata);
+            }
+        })
 
     }
 
