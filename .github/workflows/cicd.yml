@@ -29,7 +29,7 @@ jobs:
           CONTAINER_NAME="cambridgeappbackendcontainer"
           RUNNING_CONTAINER=$(docker ps -q --filter "name=$CONTAINER_NAME")
 
-          if [ -n "$RUNNING_CONTAINER"]; then
+          if ["$RUNNING_CONTAINER"]; then
             echo "Container is runnning, stopping and removing"
             docker stop $CONTAINER_NAME
             docker rm $CONTAINER_NAME
