@@ -40,7 +40,10 @@ jobs:
             echo "Container is runnning, stopping and removing"
             docker stop $CONTAINER_NAME
             docker rm $CONTAINER_NAME
-            docker image prune
           fi
+      - name: Remove the docker image to free space
+        run: docker rmi kirankumaravel/cambridgeappbackend
+      - name: Remove All Unused Images
+        run: docker image prune -a -f
       - name: Run docker container
         run: docker run -d -p 5050:5000 --name cambridgeappbackendcontainer --rm kirankumaravel/cambridgeappbackend
