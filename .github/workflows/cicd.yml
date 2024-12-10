@@ -25,6 +25,7 @@ jobs:
       - name: Pull image from docker hub
         run: docker pull kirankumaravel/cambridgeappbackend:latest
       - name: Remove existing docker container if already exists
+        shell: /usr/bin/bash -e {0}
         run: |
           CONTAINER_NAME="cambridgeappbackendcontainer"
           RUNNING_CONTAINER=$(docker ps -q --filter "name=$CONTAINER_NAME")
