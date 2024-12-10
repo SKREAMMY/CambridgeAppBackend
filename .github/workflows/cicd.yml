@@ -25,4 +25,4 @@ jobs:
       - name: Pull image from docker hub
         run: docker pull kirankumaravel/cambridgeappbackend:latest
       - name: Run docker container
-        run: docker run -d -p 5050:5000 --name cambridgeappbackendcontainer
+        run: docker run -d -p 5050:5000 --name cambridgeappbackendcontainer kirankumaravel/cambridgeappbackend
