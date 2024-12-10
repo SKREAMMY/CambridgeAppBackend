@@ -28,7 +28,7 @@ jobs:
         shell: /usr/bin/bash -e {0}
         run: |
           CONTAINER_NAME="cambridgeappbackendcontainer"
-          RUNNING_CONTAINER=$(docker ps -q --filter "name=$CONTAINER_NAME")
+          RUNNING_CONTAINER=$(docker ps -aq --filter "name=$CONTAINER_NAME")
           RUNNING_CONTAINER="${RUNNING_CONTAINER//[[:space:]]//}"
           echo "Container RC '$RUNNING_CONTAINER'"
           if [ -n "$RUNNING_CONTAINER" ]; then
