@@ -40,7 +40,7 @@ jobs:
             echo "Container is runnning, stopping and removing"
             docker stop $CONTAINER_NAME
             docker rm $CONTAINER_NAME
-            docker rmi cambridgeappbackend
+            docker rmi kirankumaravel/cambridgeappbackend
           fi
       - name: Run docker container
         run: docker run -d -p 5050:5000 --name cambridgeappbackendcontainer --rm kirankumaravel/cambridgeappbackend
