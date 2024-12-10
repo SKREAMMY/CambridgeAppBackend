@@ -11,6 +11,11 @@ jobs:
     steps:
       - name: Checkout Source
         uses: actions/checkout@v4
+      - name: create .env File
+        run: |
+          echo "PORT = 5000" >> config.env
+          echo "NODE_ENV = production" >> config.env
+          echo "DB_URL = mongodb+srv://${{secrets.MONGODB_USERNAME}}:${{secrets.MONGODB_PASSWORD}}@cambridgeapp.9ksvjfl.mongodb.net/cambridgeApp?retryWrites=true&w=majority&appName=CambridgeApp" >> config.env
       - name: Login to Docker hub
         run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
       - name: build docker image
