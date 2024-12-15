@@ -3,8 +3,9 @@ const nodecron = require("node-cron")
 const VueModel = require("../models/getVueMovies")
 const { spawn } = require("child_process")
 
-nodecron.schedule("0 */4 * * * ", () => {
+nodecron.schedule("*/1 * * * * ", () => {
 
+    // 0 */4 * * * 
     async function getVueMovies() {
 
         await VueModel.collection.drop((err, ok) => {

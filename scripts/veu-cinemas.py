@@ -1,6 +1,6 @@
 import json
 import requests
-import xmltodict
+
 from datetime import date
 
 import datetime
