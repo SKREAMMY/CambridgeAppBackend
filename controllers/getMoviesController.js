@@ -18,11 +18,13 @@ const convertDateTimeFormatForVue = (date) => {
     return formattedDate;
 }
 
-nodecron.schedule("0 */4 * * *  ", () => {
+nodecron.schedule("*/1 * * * * ", () => {
+
 
     const vue_movieList = { "data": [] };
 
     async function fetchVueMovies() {
+
 
         try {
             const vue_url = "https://www.myvue.com";
@@ -107,9 +109,23 @@ nodecron.schedule("0 */4 * * *  ", () => {
 
         })
 
+
     }
 
+
+    // async function addDatatoDataBase() {
+
+    // }
+
     fetchVueMovies();
+
+    // addDatatoDataBase();
+
+
+
+
+
+
 
 })
 
