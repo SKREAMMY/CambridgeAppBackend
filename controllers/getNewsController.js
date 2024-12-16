@@ -4,8 +4,6 @@ const cronjob = require('node-cron')
 const parseString = require("xml2js").parseString;
 const fetch = require("node-fetch");
 
-// const sys = require('sys')
-
 const LocalBBC = require("../models/localNewsBBCModel");
 const GlobalTopStoriesBBC = require("../models/globalNewsBBCModel");
 const GlobalWorldBBC = require("../models/globalWorld");
@@ -19,7 +17,7 @@ var http = require("https")
 
 function convertXMLToJSON(url, dbName, callback) {
 
-    console.log("got db ", dbName);
+    console.log("Current Database ", dbName);
 
     var req = http.get(url, (res) => {
         var xml = "";
@@ -45,7 +43,7 @@ function convertXMLToJSON(url, dbName, callback) {
 async function appendNewstoDB(newsdata, dbName) {
 
     await dbName.collection.drop().then((res) => {
-        console.log("deleted first obj");
+        console.log("deleted object");
 
     });
 
@@ -73,7 +71,6 @@ cronjob.schedule("*/10 * * * *", () => {
         }
         else {
             var rawlocalnewsdata = data?.rss.channel[0].item;
-            // console.log(rawlocalnewsdata[0].enclosure);
 
             var newsdata = []
             rawlocalnewsdata.map((data) => {
@@ -88,8 +85,6 @@ cronjob.schedule("*/10 * * * *", () => {
                 newsdata.push(templocalnews);
 
             })
-
-
             appendNewstoDB(newsdata, dbName);
         }
     })
@@ -99,56 +94,7 @@ cronjob.schedule("*/10 * * * *", () => {
 
 cronjob.schedule(" */15 * * * * ", () => {
 
-    // async function getGlobalDataBBC(database, url) {
 
-
-    //     const python = await spawn('python', ['./scripts/convertBBCXmltoJson.py', url]);
-
-    //     let chuncks = []
-    //     python.stdout.on('data', (data) => {
-
-    //         chuncks.push(data);
-    //     })
-
-
-
-    //     python.stderr.on('data', (data) => {
-    //         console.log(` data for stderr + ${data}`);
-    //     })
-
-    //     python.on('close', () => {
-    //         let data = Buffer.concat(chuncks);
-    //         let result = JSON.parse(data);
-    //         console.log("finally data is  ", result);
-    //         result["data"].map(async (d, index) => {
-
-
-    //             await database.collection.drop((err, ok) => {
-    //                 if (err) {
-    //                     console.log("cant delete global world db");
-
-    //                 }
-    //                 if (ok) {
-    //                     console.log("db deleted");
-
-    //                 }
-    //             });
-    //             await database.create(d).then((response) => {
-    //                 console.log("created");
-    //                 console.log("added ", index, " ", d);
-
-    //             }).catch((err) => {
-    //                 console.log("unable to add the data");
-    //             });
-
-    //         })
-    //         console.log("closed cbn");
-    //     })
-
-
-    // }
-
-    const url = "https://feeds.bbci.co.uk/news/rss.xml";
     const urlList = [
         ["https://feeds.bbci.co.uk/news/rss.xml", GlobalTopStoriesBBC],
         ["https://feeds.bbci.co.uk/news/world/rss.xml", GlobalWorldBBC],
@@ -177,42 +123,10 @@ cronjob.schedule(" */15 * * * * ", () => {
                     newsdata.push(tempnews);
 
                 })
-
-                // console.log("trigerring global news");
-
                 appendNewstoDB(newsdata, dbName);
             }
         })
     }
-    // convertXMLToJSON(url, GlobalTopStoriesBBC, (err, data, dbName) => {
-    //     if (err) {
-    //         console.log("error ", err);
-
-    //     }
-    //     else {
-    //         var rawlocalnewsdata = data?.rss.channel[0].item;
-    //         // console.log(rawlocalnewsdata[0].enclosure);
-
-    //         var localnewsdata = []
-    //         rawlocalnewsdata.map((data) => {
-    //             var templocalnews = {};
-    //             templocalnews["title"] = data.title[0];
-    //             templocalnews["link"] = data.link[0];
-    //             templocalnews["guid"] = data.guid[0];
-    //             templocalnews["description"] = data.description[0];
-    //             templocalnews["pubDate"] = data.pubDate[0];
-    //             // templocalnews["enclosure"] = data["enclosure"][0]["$"]["url"];
-    //             templocalnews["mediaThumbnail"] = data["media:thumbnail"][0]["$"];
-    //             localnewsdata.push(templocalnews);
-
-    //         })
-
-    //         console.log("trigerring global news");
-
-    //         appendNewstoDB(localnewsdata, dbName);
-    //     }
-    // })
-
 
 })
 
@@ -257,41 +171,15 @@ getGlobalNews = async (req, res, next) => {
 
     res.status(200).json({ success: true, data: resultdata })
 
-
-
-
-
-
-    // fs.readFile('./newsJSON/bcci.json', 'utf-8', (err, data) => {
-    //     datatosend = JSON.parse(data);
-    //     res.status(200).json({ success: true, data: datatosend });
-    // })
-
-
-
 }
 
 getLocalNews = async (req, res, next) => {
 
-    // let result
-    // try {
-    //     result = LocalBBC.find({});
-
-    // } catch (err) {
-    //     console.log(err);
-    // }
-
     const resultdata = await LocalBBC.find({});
-    // console.log({ resultdata });
-
-
     res.status(200).json({ success: true, data: resultdata });
 
 
 }
-
-
-
 
 
 module.exports = { getGlobalNews, getLocalNews }

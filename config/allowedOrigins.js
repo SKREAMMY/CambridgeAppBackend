@@ -1,7 +1,8 @@
 const options = {
     origin: (origin, callback) => {
         const allowedOrigins = [
-            "http://3.93.56.149"
+            "http://3.93.56.149",
+            "http://localhost:5173",
         ];
 
         // Allow requests with no origin (e.g., mobile apps or Postman)
