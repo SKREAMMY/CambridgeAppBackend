@@ -18,14 +18,11 @@ const convertDateTimeFormatForVue = (date) => {
     return formattedDate;
 }
 
-nodecron.schedule("*/1 * * * * ", () => {
-
-
-    const vue_movieList = { "data": [] };
+nodecron.schedule("0 */4 * * * ", () => {
 
     async function fetchVueMovies() {
 
-
+        let vue_movieList = { "data": [] };
         try {
             const vue_url = "https://www.myvue.com";
             const sessionResponse = await client.get("https://www.myvue.com");
@@ -77,10 +74,6 @@ nodecron.schedule("*/1 * * * * ", () => {
 
             }
 
-            // console.log("final movie list is ", vue_movieList["data"]);
-
-
-
         } catch (error) {
             console.log("error in getting data response ", error.message);
 
@@ -97,11 +90,11 @@ nodecron.schedule("*/1 * * * * ", () => {
             }
         });
 
-        await vue_movieList["data"].map(async (d, index) => {
+        vue_movieList["data"].map(async (d, index) => {
 
             await VueModel.create(d).then((response) => {
-                console.log("created movies");
-                console.log("added ", index, " ", d);
+                // console.log("created movies");
+                // console.log("added ", index, response);
 
             }).catch((err) => {
                 console.log("unable to add the data");
@@ -112,20 +105,7 @@ nodecron.schedule("*/1 * * * * ", () => {
 
     }
 
-
-    // async function addDatatoDataBase() {
-
-    // }
-
     fetchVueMovies();
-
-    // addDatatoDataBase();
-
-
-
-
-
-
 
 })
 
