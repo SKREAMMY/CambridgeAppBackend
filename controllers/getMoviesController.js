@@ -18,7 +18,7 @@ const convertDateTimeFormatForVue = (date) => {
     return formattedDate;
 }
 
-nodecron.schedule("0 */5 * * * ", () => {
+nodecron.schedule("*/5 * * * * ", () => {
 
     async function fetchVueMovies() {
 

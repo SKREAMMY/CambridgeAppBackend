@@ -50,10 +50,10 @@ async function appendNewstoDB(newsdata, dbName) {
     newsdata.map(async (news) => {
 
         await dbName.create(news).then((result) => {
-            console.log("successfully added data ", news);
+            // console.log("successfully added data ");
 
         }).catch((error) => {
-            console.log("error in adding to database", error);
+            // console.log("error in adding to database", error);
 
         });
     })
