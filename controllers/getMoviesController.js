@@ -18,7 +18,7 @@ const convertDateTimeFormatForVue = (date) => {
     return formattedDate;
 }
 
-nodecron.schedule("*/5 * * * * ", () => {
+nodecron.schedule("*/1 * * * * ", () => {
 
     async function fetchVueMovies() {
 
@@ -82,7 +82,7 @@ nodecron.schedule("*/5 * * * * ", () => {
             }
 
         } catch (error) {
-            console.log("error in getting data response ", error.message);
+            console.error('Error:', error.response?.status, error.response?.data, error.response?.headers);
 
         }
 
