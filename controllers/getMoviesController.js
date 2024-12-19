@@ -18,7 +18,7 @@ const convertDateTimeFormatForVue = (date) => {
     return formattedDate;
 }
 
-nodecron.schedule("0 */3 * * * ", () => {
+nodecron.schedule("*/5 * * * * ", () => {
 
     async function fetchVueMovies() {
 
@@ -94,7 +94,7 @@ nodecron.schedule("0 */3 * * * ", () => {
 
             await VueModel.create(d).then((response) => {
                 // console.log("created movies");
-                // console.log("added ", index, response);
+                console.log("added ", index, response);
 
             }).catch((err) => {
                 console.log("unable to add the data");
