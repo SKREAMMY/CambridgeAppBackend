@@ -28,7 +28,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Pull image from docker hub
-        run: docker pull kirankumaravel/cambridgeappbackend:latest
+        run: sudo docker pull kirankumaravel/cambridgeappbackend:latest
       - name: Remove existing docker container if already exists.
         shell: /usr/bin/bash -e {0}
         run: |
@@ -42,8 +42,8 @@ jobs:
             docker rm $CONTAINER_NAME || true
           fi
       - name: Remove the docker image to free space
-        run: docker rmi kirankumaravel/cambridgeappbackend
+        run: sudo docker rmi kirankumaravel/cambridgeappbackend
       - name: Remove All Unused Images
-        run: docker image prune -a -f
+        run: sudo docker image prune -a -f
       - name: Run docker container
-        run: docker run -d -p 5050:5000 --name cambridgeappbackendcontainer --rm kirankumaravel/cambridgeappbackend
+        run: sudo docker run -d -p 5050:5000 --name cambridgeappbackendcontainer --rm kirankumaravel/cambridgeappbackend
