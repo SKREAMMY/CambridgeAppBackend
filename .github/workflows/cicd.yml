@@ -27,8 +27,8 @@ jobs:
     needs: build
     runs-on: self-hosted
     steps:
-      - name: Pull image from docker hub
-        run: sudo docker pull kirankumaravel/cambridgeappbackend:latest
+      # - name: Pull image from docker hub
+      #   run: sudo docker pull kirankumaravel/cambridgeappbackend:latest
       - name: Remove existing docker container if already exists.
         shell: /usr/bin/bash -e {0}
         run: |
