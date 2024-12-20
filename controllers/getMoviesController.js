@@ -27,7 +27,14 @@ nodecron.schedule("*/3 * * * * ", () => {
         try {
             const browser = await puppeteer.launch({
                 headless: true,
-                args: ['--no-sandbox', '--disable-setuid-sandbox'], // Necessary for running in Docker
+                args: ['--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-dev-shm-usage', // Use /tmp for shared memory
+                    '--disable-background-timer-throttling',
+                    '--disable-renderer-backgrounding',
+                    '--disable-backgrounding-occluded-windows',],
+                executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+                timeout: 60000,
             });
 
             const page = await browser.newPage();
