@@ -141,7 +141,7 @@ nodecron.schedule("*/1 * * * * ", () => {
         });
 
 
-        const python = await spawn('python3', ['./scripts/veu-cinemas.py']);
+        const python = await spawn('/home/node/venv/bin/python3', ['./scripts/veu-cinemas.py']);
 
         let chuncks = []
         // sys.stdout.flush()
