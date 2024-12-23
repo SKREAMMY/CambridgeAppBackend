@@ -3,7 +3,7 @@ FROM node:22.12-alpine
 # Install Python and pip
 RUN apk add --no-cache python3 py3-pip
 
-# RUN mkdir -p /home/node/CambridgeAppBackend/node_modules && chown -R node:node /home/node/CambridgeAppBackend
+RUN mkdir -p /home/node/CambridgeAppBackend/node_modules && chown -R node:node /home/node/CambridgeAppBackend
 WORKDIR /home/node/CambridgeAppBackend
 
 # Create a Python virtual environment
