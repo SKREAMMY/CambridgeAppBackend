@@ -2,7 +2,7 @@
 const nodecron = require("node-cron")
 const axios = require('axios');
 const VueModel = require("../models/getVueMovies")
-const { spawn } = require("child_process")
+// const { spawn } = require("child_process")
 const { CookieJar } = require("tough-cookie");
 const { wrapper } = require("axios-cookiejar-support");
 
