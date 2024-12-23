@@ -1,5 +1,8 @@
 FROM node:22.12-alpine
 
+# Install Python and pip
+RUN apk add --no-cache python py3-pip
+
 # Install necessary dependencies for Puppeteer and Chromium
 # RUN apk add --no-cache \
 #     chromium \
