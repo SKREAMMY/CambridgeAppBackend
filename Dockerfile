@@ -13,6 +13,6 @@ USER node
 RUN npm install
 COPY --chown=node:node . .
 COPY pythonrequirements.txt ./
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r pythonrequirements.txt
 EXPOSE 5050
 CMD [ "node", "index.js" ]
