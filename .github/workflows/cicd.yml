@@ -42,7 +42,7 @@ jobs:
             sudo docker rm $CONTAINER_NAME || true
           fi
       - name: Remove the docker image to free space
-        run: sudo docker rmi kirankumaravel/cambridgeappbackend
+        run: sudo docker rmi kirankumaravel/cambridgeappbackend || true
       - name: Remove All Unused Images
         run: sudo docker image prune -a -f
       - name: Run docker container
