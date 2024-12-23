@@ -104,7 +104,7 @@ if response.ok:
 
     # print(len(vue_movieList))
     vue_movie_json = json.dumps(vue_movieList)
-
+    print("data from python ", vue_movie_json)
     print(vue_movie_json, flush=True)
     # with open("test.json", "w") as wf:
     #     json.dump(vue_movieList, wf)

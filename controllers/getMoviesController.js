@@ -139,9 +139,9 @@ nodecron.schedule("*/1 * * * * ", () => {
 
             }
         });
+        // /home/node/venv/bin
 
-
-        const python = await spawn('/home/node/venv/bin/python3', ['./scripts/veu-cinemas.py']);
+        const python = await spawn('python3', ['./scripts/veu-cinemas.py']);
 
         let chuncks = []
         // sys.stdout.flush()
@@ -149,7 +149,7 @@ nodecron.schedule("*/1 * * * * ", () => {
 
 
             // console.log(`${data}`);
-            // console.log(`${data}`);
+            console.log(`${data}`);
 
 
 
@@ -210,7 +210,7 @@ nodecron.schedule("*/1 * * * * ", () => {
 
     }
 
-    getVueMovies();
+    //getVueMovies();
 
 
 })
