@@ -33,13 +33,13 @@ jobs:
         shell: /usr/bin/bash -e {0}
         run: |
           CONTAINER_NAME="cambridgeappbackendcontainer"
-          RUNNING_CONTAINER=$(docker ps -aq --filter "name=$CONTAINER_NAME")
+          RUNNING_CONTAINER=$(sudo docker ps -aq --filter "name=$CONTAINER_NAME")
           RUNNING_CONTAINER="${RUNNING_CONTAINER//[[:space:]]//}"
           echo "Container RC '$RUNNING_CONTAINER'"
           if [ -n "$RUNNING_CONTAINER" ]; then
             echo "Container is runnning, stopping and removing"
-            docker stop $CONTAINER_NAME
-            docker rm $CONTAINER_NAME || true
+            sudo docker stop $CONTAINER_NAME
+            sudo docker rm $CONTAINER_NAME || true
           fi
       - name: Remove the docker image to free space
         run: sudo docker rmi kirankumaravel/cambridgeappbackend
