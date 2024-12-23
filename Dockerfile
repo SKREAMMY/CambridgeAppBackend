@@ -8,7 +8,7 @@ WORKDIR /home/node/CambridgeAppBackend
 
 # Create a Python virtual environment
 RUN python3 -m venv /usr/src/app/venv
-
+RUN chown -R node:node /usr/src/app
 COPY --chown=node:node package*.json ./
 USER node
 RUN npm install
