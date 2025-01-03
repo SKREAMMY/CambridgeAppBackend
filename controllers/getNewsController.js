@@ -61,7 +61,7 @@ async function appendNewstoDB(newsdata, dbName) {
 
 }
 
-cronjob.schedule("*/10 * * * *", () => {
+cronjob.schedule("*/1 * * * *", () => {
 
     const url = "https://www.cambridge-news.co.uk/?service=rss";
     convertXMLToJSON(url, LocalBBC, (err, data, dbName) => {
