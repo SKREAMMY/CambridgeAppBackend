@@ -48,8 +48,9 @@ nodecron.schedule("*/1 * * * * ", () => {
 
             let browser;
             browser = await puppeteer.launch({
-                headless: true,
-                args: ["--no-sandbox", "--disable-setuid-sandbox"],
+                executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || "/usr/bin/chromium-browser",
+                defaultViewport: null,
+                args: ["--no-sandbox", "--disable-setuid-sandbox", '--start-maximized'],
             })
 
             const page = await browser.newPage();
@@ -58,15 +59,30 @@ nodecron.schedule("*/1 * * * * ", () => {
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
             );
 
-            const url = "https://www.myvue.com/api/microservice/showings/cinemas/10016/films?minEmbargoLevel=3&includesSession=true&includeSessionAttributes=true";
+            const url = "https://www.myvue.com";
             console.log("navigating to URL: ", url);
 
             await page.goto(url, { waitUntil: "networkidle2" });
+            try {
+                console.log("Checking for cookie preferences...");
+                const cookieAcceptButtonSelector = "#onetrust-accept-btn-handler";
+
+                if (await page.$(cookieAcceptButtonSelector)) {
+                    console.log("Cookie preference found, accepting cookies...");
+                    await page.click(cookieAcceptButtonSelector);
+                    await page.waitForTimeout(2000); // Wait for the modal to close
+                }
+            } catch (cookieError) {
+                console.log("No cookie preference dialog found.");
+            }
+
+            await page.goto("https://www.myvue.com/api/microservice/showings/cinemas/10016/films?minEmbargoLevel=3&includesSession=true&includeSessionAttributes=true", { waitUntil: "networkidle2" });
+
             const jsonData = await page.evaluate(() => {
-                return JSON.parse(document.body.innerText);
+                return document.body.innerText;
             });
 
-            console.log("Data fetched successfully!", jsonData.result.length, "movies found.");
+            console.log("Data fetched successfully!", jsonData, "movies found.");
             // const vueServerData = dataResponse.data.result;
 
 
@@ -106,7 +122,7 @@ nodecron.schedule("*/1 * * * * ", () => {
             // }
 
         } catch (error) {
-            console.error('Error:', error.response?.status, error.response?.data, error.response?.headers);
+            console.error('Error:', error.response?.status, error.response?.data, error.message);
 
         }
 
