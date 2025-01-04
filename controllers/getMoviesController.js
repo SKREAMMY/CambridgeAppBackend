@@ -3,11 +3,11 @@ const nodecron = require("node-cron")
 const axios = require('axios');
 const VueModel = require("../models/getVueMovies")
 const { spawn } = require("child_process")
-// const { CookieJar } = require("tough-cookie");
-// const { wrapper } = require("axios-cookiejar-support");
+const { CookieJar } = require("tough-cookie");
+const { wrapper } = require("axios-cookiejar-support");
 
-// const jar = new CookieJar();
-// const client = wrapper(axios.create({ jar }));
+const jar = new CookieJar();
+const client = wrapper(axios.create({ jar }));
 
 // const convertDateTimeFormatForVue = (date) => {
 //     const newdate = new Date(date);
@@ -25,34 +25,21 @@ nodecron.schedule("*/1 * * * * ", () => {
         let vue_movieList = { "data": [] };
         try {
             const vue_url = "https://www.myvue.com";
-            const sessionResponse = await client.get("https://www.myvue.com", {
+            const sessionResponse = await client.get(vue_url, {
                 headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36', // Mimic a real browser
-                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                    'Accept-Encoding': 'gzip, deflate, br',
-                    'Accept-Language': 'en-US,en;q=0.5',
-                    'Connection': 'keep-alive',
-                    'Upgrade-Insecure-Requests': '1',
-                    'Sec-Fetch-Dest': 'document',
-                    'Sec-Fetch-Mode': 'navigate',
-                    'Sec-Fetch-Site': 'none',
-                    'Sec-Fetch-User': '?1',
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                    "Referer": vue_url,
+                    "Origin": vue_url,
                 }
             });
             console.log("connection established ", sessionResponse.status);
 
             const dataResponse = await client.get("https://www.myvue.com/api/microservice/showings/cinemas/10016/films?minEmbargoLevel=3&includesSession=true&includeSessionAttributes=true", {
                 headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36', // Mimic a real browser
-                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                    'Accept-Encoding': 'gzip, deflate, br',
-                    'Accept-Language': 'en-US,en;q=0.5',
-                    'Connection': 'keep-alive',
-                    'Upgrade-Insecure-Requests': '1',
-                    'Sec-Fetch-Dest': 'document',
-                    'Sec-Fetch-Mode': 'navigate',
-                    'Sec-Fetch-Site': 'none',
-                    'Sec-Fetch-User': '?1',
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+                    "Referer": vue_url,
+                    "Origin": vue_url,
                 }
             })
 
