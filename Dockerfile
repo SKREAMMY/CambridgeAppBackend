@@ -24,7 +24,7 @@
 FROM node:22.12-alpine
 
 # Install Python and pip
-RUN apk add --no-cache python3 py3-pip
+# RUN apk add --no-cache python3 py3-pip
 
 # Create necessary directories and set correct permissions
 RUN mkdir -p /home/node/CambridgeAppBackend/node_modules && \
@@ -34,11 +34,11 @@ RUN mkdir -p /home/node/CambridgeAppBackend/node_modules && \
 WORKDIR /home/node/CambridgeAppBackend
 
 # Create a Python virtual environment
-RUN python3 -m venv /home/node/venv
+# RUN python3 -m venv /home/node/venv
 
 # Copy and install Python dependencies
-COPY pythonrequirements.txt ./
-RUN . /home/node/venv/bin/activate && pip install --no-cache-dir -r pythonrequirements.txt
+# COPY pythonrequirements.txt ./
+# RUN . /home/node/venv/bin/activate && pip install --no-cache-dir -r pythonrequirements.txt
 
 # Copy package.json and install Node.js dependencies
 COPY package*.json ./
