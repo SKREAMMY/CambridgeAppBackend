@@ -5,6 +5,7 @@ const VueModel = require("../models/getVueMovies")
 const { spawn } = require("child_process")
 const { CookieJar } = require("tough-cookie");
 const { wrapper } = require("axios-cookiejar-support");
+const cloudscraper = require("cloudscraper");
 
 const jar = new CookieJar();
 const client = wrapper(axios.create({ jar }));
@@ -25,7 +26,7 @@ nodecron.schedule("*/1 * * * * ", () => {
         let vue_movieList = { "data": [] };
         try {
             const vue_url = "https://www.myvue.com";
-            const sessionResponse = await client.get(vue_url, {
+            const sessionResponse = await cloudscraper.get(vue_url, {
                 headers: {
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
                     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
@@ -35,7 +36,7 @@ nodecron.schedule("*/1 * * * * ", () => {
             });
             console.log("connection established ", sessionResponse.status);
 
-            const dataResponse = await client.get("https://www.myvue.com/api/microservice/showings/cinemas/10016/films?minEmbargoLevel=3&includesSession=true&includeSessionAttributes=true", {
+            const dataResponse = await cloudscraper.get("https://www.myvue.com/api/microservice/showings/cinemas/10016/films?minEmbargoLevel=3&includesSession=true&includeSessionAttributes=true", {
                 headers: {
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
                     "Referer": vue_url,
