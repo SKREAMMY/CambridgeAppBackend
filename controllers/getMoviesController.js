@@ -10,7 +10,7 @@ const VueModel = require("../models/getVueMovies")
 // const jar = new CookieJar();
 // const client = wrapper(axios.create({ jar }));
 
-const puppeteer = requir("pupeteer");
+const puppeteer = require("pupeteer");
 
 // const convertDateTimeFormatForVue = (date) => {
 //     const newdate = new Date(date);
