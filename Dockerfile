@@ -23,8 +23,16 @@
 # Use a lightweight Node.js image with Alpine Linux
 FROM node:22.12-alpine
 
-# Install Python and pip
-# RUN apk add --no-cache python3 py3-pip
+# Install necessary packages, including Chromium for Puppeteer
+RUN apk add --no-cache \
+    chromium \
+    nss \
+    freetype \
+    freetype-dev \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont \
+    bash
 
 # Create necessary directories and set correct permissions
 RUN mkdir -p /home/node/CambridgeAppBackend/node_modules && \
@@ -46,6 +54,10 @@ RUN npm install
 
 # Copy all application files with correct ownership
 COPY --chown=node:node . .
+
+# Set the CHROME_PATH environment variable for Puppeteer
+ENV CHROME_PATH=/usr/bin/chromium-browser \
+    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 
 # Switch to the non-root "node" user
 USER node
