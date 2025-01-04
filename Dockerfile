@@ -34,6 +34,9 @@ RUN apk add --no-cache \
     ttf-freefont \
     bash
 
+# Set Puppeteer cache directory environment variable
+ENV PUPPETEER_CACHE_DIR=/tmp/puppeteer_cache
+
 # Create necessary directories and set correct permissions
 RUN mkdir -p /home/node/CambridgeAppBackend/node_modules && \
     chown -R node:node /home/node/CambridgeAppBackend
