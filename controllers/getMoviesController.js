@@ -10,7 +10,10 @@ const VueModel = require("../models/getVueMovies")
 // const jar = new CookieJar();
 // const client = wrapper(axios.create({ jar }));
 
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-extra");
+const StealthPlugin = require("puppeteer-extra-plugin-stealth");
+
+puppeteer.use(StealthPlugin());
 
 // const convertDateTimeFormatForVue = (date) => {
 //     const newdate = new Date(date);
@@ -50,6 +53,7 @@ nodecron.schedule("*/1 * * * * ", () => {
             browser = await puppeteer.launch({
                 executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || "/usr/bin/chromium-browser",
                 defaultViewport: null,
+                headless: true,
                 args: ["--no-sandbox", "--disable-setuid-sandbox", '--start-maximized'],
             })
 

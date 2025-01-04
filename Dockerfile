@@ -55,6 +55,9 @@ WORKDIR /home/node/CambridgeAppBackend
 COPY package*.json ./
 RUN npm install
 
+# Install Puppeteer and Puppeteer Extra Plugins
+RUN npm install puppeteer-extra puppeteer-extra-plugin-stealth
+
 # Copy all application files with correct ownership
 COPY --chown=node:node . .
 
